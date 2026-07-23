@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Tiburones.exe</title>
+<style>
+:root{--bg:#000;--card:#171719;--line:#2c2c30;--text:#f5f5f7;--muted:#8e8e93;--green:#30d158;--red:#ff453a;--yellow:#ffd60a;--blue:#0a84ff}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#000;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}button,input{font:inherit}button{cursor:pointer}
+#app{width:min(100%,680px);min-height:100dvh;margin:auto;background:#000;position:relative}.screen{display:none;min-height:100dvh}.screen.active{display:block}
+.status{height:46px;padding:10px 20px 0;display:flex;justify-content:space-between;position:sticky;top:0;z-index:50;background:#000e;backdrop-filter:blur(24px);font-weight:700;font-size:14px}
+.head{display:flex;align-items:center;gap:11px;padding:9px 14px 13px;position:sticky;top:46px;z-index:45;background:#000e;backdrop-filter:blur(24px);border-bottom:1px solid #202024}
+.head.big{justify-content:space-between;align-items:end;padding:12px 18px}.head.big h1{font-size:36px;margin:0;letter-spacing:-1.4px}.title{flex:1;min-width:0}.title h2{margin:0;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.title p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.circle,.back{width:42px;height:42px;border-radius:50%;border:1px solid #343438;background:#1c1c1e;color:white;display:grid;place-items:center}.back{font-size:29px}
+.avatar{width:58px;height:58px;min-width:58px;border-radius:19px;background:linear-gradient(145deg,#29292d,#151518);display:grid;place-items:center;font-size:28px;border:1px solid #303034;position:relative}.avatar.sm{width:48px;height:48px;min-width:48px;border-radius:15px;font-size:22px}.dot{position:absolute;width:15px;height:15px;border-radius:50%;right:-2px;bottom:0;background:var(--green);border:3px solid #000}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:8px 18px 14px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.chip{border:1px solid #303034;background:#121214;color:#aaa;border-radius:999px;padding:8px 15px;white-space:nowrap;font-weight:700}.chip.active{background:#3a3a3c;color:#fff}
+.list{padding-bottom:105px}.row{width:100%;display:flex;gap:13px;align-items:center;padding:14px 18px;background:transparent;border:0;border-bottom:1px solid #202023;color:#fff;text-align:left}.row:active{background:#151517}.copy{flex:1;min-width:0}.topline{display:flex;justify-content:space-between;gap:10px}.row h3{margin:0;font-size:18px}.row p{margin:5px 0 0;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row time{font-size:12px;color:var(--green)}.badge{background:var(--green);color:#001a08;border-radius:999px;min-width:26px;height:26px;padding:0 7px;display:grid;place-items:center;font-size:12px;font-weight:900}.locked{opacity:.42}
+.nav{position:sticky;bottom:10px;margin:0 auto 10px;width:calc(100% - 22px);display:grid;grid-template-columns:repeat(5,1fr);padding:8px;border:1px solid #ffffff25;border-radius:30px;background:#252527ee;backdrop-filter:blur(26px);z-index:60}.nav button{border:0;background:transparent;color:#ccc;border-radius:22px;padding:7px 2px;display:grid;place-items:center;gap:3px;font-size:19px}.nav span{font-size:9px}.nav .active{background:#4a4a4d;color:#fff}
+.login{min-height:100dvh;display:grid;place-items:center;padding:26px;background:radial-gradient(circle at 85% 0,#123c32,transparent 35%),radial-gradient(circle at 0 85%,#112e39,transparent 30%),#000}.loginbox{width:min(100%,430px)}.logo{width:82px;height:82px;border-radius:26px;display:grid;place-items:center;font-size:44px;background:linear-gradient(145deg,#174938,#0c1714);border:1px solid #2c6a55}.login h1{font-size:48px;margin:18px 0 6px;letter-spacing:-2px}.login p{color:#aaa;line-height:1.55}.login label{display:grid;gap:7px;margin:13px 0;font-size:13px;font-weight:700}.login input{border:1px solid #303034;background:#161618;color:#fff;padding:15px;border-radius:16px}.primary{width:100%;border:0;border-radius:17px;padding:15px;background:linear-gradient(135deg,#48e88a,#20bd5a);color:#03170a;font-weight:900;margin-top:9px}.note{font-size:11px;color:#777;margin-top:13px}
+.hero{margin:15px 16px;border-radius:24px;padding:18px;background:linear-gradient(135deg,#113f2b,#111315 68%);border:1px solid #1b593c;display:flex;justify-content:space-between;align-items:center}.hero span{font-size:10px;color:#76efac;font-weight:900;letter-spacing:1.3px}.hero h2{margin:5px 0 0}.stats{display:flex;gap:13px}.stats div{text-align:center}.stats strong{display:block;font-size:20px}.stats small{color:var(--muted)}
+.section{padding:17px 18px 7px;color:var(--muted);font-size:17px;font-weight:800}.group{display:flex;gap:13px;align-items:center;padding:14px 18px;border-bottom:1px solid #202023}.group .copy h3{margin:0;font-size:17px}.group .copy p{margin:4px 0 0;color:var(--muted)}
+.hud{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;padding:9px 14px;background:#111113;border-bottom:1px solid #242428;position:sticky;top:108px;z-index:40}.hud label{display:block;font-size:10px;color:#999;margin-bottom:4px}.bar{height:7px;background:#29292d;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:var(--green)}.bar.red i{background:var(--red)}.hud strong{font-variant-numeric:tabular-nums}.timer{color:var(--yellow)}
+.messages{min-height:calc(100dvh - 185px);padding:18px 12px 235px;background:linear-gradient(#070808e9,#070808e9),radial-gradient(circle at 20% 20%,#17412e,transparent 28%),radial-gradient(circle at 85% 60%,#25272d,transparent 25%)}.date{width:max-content;margin:0 auto 14px;padding:5px 10px;border-radius:999px;background:#19191b;border:1px solid #29292d;color:#999;font-size:10px}.msg{width:max-content;max-width:82%;position:relative;background:#1d1d20;border-radius:15px;padding:9px 11px 17px;margin:8px 0;box-shadow:0 3px 12px #0006}.msg.me{margin-left:auto;background:#075e3d}.msg.bad{background:#312027}.msg.ally{background:#152b3c}.name{font-size:11px;font-weight:900;color:#68e8a3;margin-bottom:3px}.msg.bad .name{color:#ff8fa2}.msg.ally .name{color:#6dbdff}.msg p{margin:0;line-height:1.38}.msg time{position:absolute;right:8px;bottom:4px;font-size:9px;color:#85858a}
+.panel{position:sticky;bottom:72px;z-index:42;margin:-220px 10px 85px;padding:12px;border-radius:22px;background:#18181af7;border:1px solid #38383d;backdrop-filter:blur(24px);box-shadow:0 20px 55px #000a}.panel:empty{display:none}.panel-label{display:block;color:#999;font-size:11px;margin:2px 4px 7px}.panel button{width:100%;border:0;border-radius:14px;padding:12px;background:#2a2a2d;color:#fff;text-align:left;margin-top:7px}.panel button.good{background:var(--green);color:#03170a;font-weight:900;text-align:center}
+.composer{position:sticky;bottom:0;z-index:43;display:grid;grid-template-columns:42px 1fr 42px;gap:8px;padding:9px 11px calc(9px + env(safe-area-inset-bottom));background:#101012;border-top:1px solid #27272a}.composer input{border:1px solid #343438;background:#252528;color:#fff;border-radius:999px;padding:12px 15px}.composer button{border:0;border-radius:50%;background:#2b2b2e;color:#fff}.composer .send{background:var(--green);color:#03170a}
+.capture-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.idcard{padding:11px;border:1px solid #36363b;background:#19191c;border-radius:15px;color:#fff;text-align:left}.idcard strong,.idcard small{display:block}.idcard small{color:#929299;margin-top:4px}.idcard.sel{border-color:var(--green);background:#0d2d1d}.idcard.badsel{border-color:var(--red);background:#32181b}
+.draggrid{display:grid;grid-template-columns:1fr;gap:10px}
+.zone{min-height:72px;padding:10px;border:1px dashed #4c4c52;border-radius:15px;background:#101012}
+.zone h4{margin:0 0 8px;color:#aaa;font-size:12px}
+.token{padding:11px;background:#2a2a2e;border:1px solid #3c3c42;border-radius:12px;margin:7px 0;touch-action:manipulation}
+#team .messages{min-height:280px;padding-bottom:18px}
+#teamPanel{position:static;margin:12px 10px 28px;max-height:none}
+.ficha-slots{display:grid;gap:8px;margin:10px 0}
+.ficha-slot{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px;border-radius:13px;background:#111113;border:1px solid #343438}
+.ficha-slot span{font-size:12px;color:#999}
+.ficha-slot strong{font-size:13px;text-align:right}
+.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.option-grid button{margin:0!important;text-align:center!important;padding:10px!important}
+.option-grid button.used{opacity:.35}
+.signal{animation:flash .6s infinite alternate}@keyframes flash{from{background:#291519}to{background:#5a1b29}}
+.progresscards{display:grid;gap:9px;padding:12px 16px}.progresscard{padding:14px;border-radius:18px;background:#151517;border:1px solid #2f2f34;display:flex;justify-content:space-between;align-items:center}.progresscard.done{border-color:#1c6d43;background:#0d261a}
+.boss{min-height:100dvh;padding:35px 18px;text-align:center;background:radial-gradient(circle at top,#40252e,#080808 43%)}.bossicon{font-size:88px}.boss h1{font-size:52px;color:#ff6b81;letter-spacing:4px;margin:0}.boss p{color:#aaa}.meter{text-align:left;margin:16px 0}.meter div{display:flex;justify-content:space-between;font-size:12px}.meter progress{width:100%;height:16px;accent-color:#ff5e73}.meter.team progress{accent-color:var(--green)}.bosslog{height:155px;overflow:auto;text-align:left;border:1px solid #303034;background:#111113;border-radius:18px;padding:12px;color:#aaa}.bosslog div{padding:5px 0;border-bottom:1px solid #242428}.bossactions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.bossactions button{min-height:59px;border:1px solid #36363a;background:#1b1b1e;color:#fff;border-radius:15px}
+.toast{position:fixed;z-index:90;top:15px;left:50%;transform:translateX(-50%);background:#f5fff9;color:#032014;border-radius:999px;padding:10px 16px;font-weight:900}.modal{position:fixed;z-index:100;inset:0;background:#000c;display:grid;place-items:center;padding:20px}.modal.hidden{display:none}.modalbox{width:min(100%,410px);padding:23px;border-radius:24px;background:#19191b;border:1px solid #343438}.modalbox h2{margin-top:0}.modalbox p{color:#aaa;line-height:1.5}.modalbox button{width:100%;border:0;border-radius:14px;padding:13px;background:var(--green);color:#03170a;font-weight:900}
+
+.tutorial{min-height:100dvh;padding:calc(28px + env(safe-area-inset-top)) 18px 28px;background:radial-gradient(circle at 80% 0,#153f35,transparent 34%),radial-gradient(circle at 0 90%,#112f3a,transparent 30%),#000}
+.tutorial-card{width:min(100%,520px);margin:auto;padding:24px;border-radius:28px;background:#151517;border:1px solid #343438;box-shadow:0 25px 80px #0009}
+.tutorial-icon{width:76px;height:76px;border-radius:24px;display:grid;place-items:center;font-size:40px;background:#202024;border:1px solid #3a3a3f;margin-bottom:18px}
+.tutorial-step{color:var(--green);font-size:11px;font-weight:900;letter-spacing:1.5px}
+.tutorial-card h2{font-size:30px;margin:8px 0 10px}
+.tutorial-card p{color:#aaa;line-height:1.55}
+.tutorial-example{margin:16px 0;padding:14px;border-radius:18px;background:#0e0e10;border:1px solid #2d2d31}
+.tutorial-example strong{display:block;margin-bottom:6px}
+.tutorial-example span{display:block;color:#9b9ba0;font-size:13px;line-height:1.45}
+.tutorial-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+.tutorial-actions button{border:1px solid #38383d;border-radius:15px;padding:13px;background:#252528;color:#fff;font-weight:800}
+.tutorial-actions .next{background:var(--green);color:#03170a;border:0}
+.manual-btn{position:fixed;right:18px;bottom:96px;z-index:70;width:52px;height:52px;border-radius:50%;border:1px solid #ffffff22;background:#242426e8;color:#fff;font-size:23px;box-shadow:0 12px 35px #0008}
+
+@media(min-width:760px){body{padding:20px}#app{min-height:calc(100dvh - 40px);border:1px solid #29292d;border-radius:34px;overflow:clip}.screen{min-height:calc(100dvh - 40px)}.messages{min-height:630px}.panel{margin-left:12px;margin-right:12px}}
+</style>
+</head>
+<body><div id="app">
+<section id="login" class="screen active"><div class="login"><div class="loginbox"><div class="logo">🦈</div><h1>Tiburones.exe</h1><p>Campaña de infiltración en Clanes Raiders NPC. Protege varios Teams antes de cerrar la red de CLIPER.</p><form id="loginForm"><label>Nombre de agente<input id="agent" maxlength="18" required placeholder="Mako-07"></label><label>Código de sala<input id="room" maxlength="12" value="TIBURON" required></label><button id="loginBtn" type="submit" class="primary">Entrar a la red</button></form><div class="note">En iPhone debe abrirse desde una página web publicada; la vista previa de Archivos puede bloquear JavaScript.</div></div></div></section>
+
+
+<section id="tutorial" class="screen">
+  <div class="tutorial">
+    <div class="tutorial-card">
+      <div id="tutorialIcon" class="tutorial-icon">🦈</div>
+      <div id="tutorialStep" class="tutorial-step">PASO 1 DE 6</div>
+      <h2 id="tutorialTitle">Bienvenido a Tiburones.exe</h2>
+      <p id="tutorialText"></p>
+      <div id="tutorialExample" class="tutorial-example"></div>
+      <div class="tutorial-actions">
+        <button id="tutorialBack">Atrás</button>
+        <button id="tutorialNext" class="next">Siguiente</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="home" class="screen"><div class="status"><span class="clock">3:49</span><span>▮▮▮ ᯤ 🔋</span></div><header class="head big"><h1>Chats</h1><div><button class="circle">⌕</button> <button class="circle">＋</button></div></header><div class="filters"><button class="chip active">Todos</button><button class="chip">No leídos 6</button><button class="chip">Favoritos</button><button class="chip">Comunidades</button></div><main class="list"><button class="row" onclick="openClan()"><div class="avatar">📎<i class="dot"></i></div><div class="copy"><div class="topline"><h3>Clan CLIPER</h3><time>Ahora</time></div><p>Avisos: nuevos reclutas, entren al Lobby.</p></div><span class="badge">6</span></button><button class="row locked"><div class="avatar">🔥</div><div class="copy"><h3>Clan Fénix</h3><p>Próximamente</p></div></button><button class="row locked"><div class="avatar">🦊</div><div class="copy"><h3>Clan Fox</h3><p>Próximamente</p></div></button></main><nav class="nav"><button>◉<span>Novedades</span></button><button>☎<span>Llamadas</span></button><button>▣<span>Herramientas</span></button><button class="active">●<span>Chats</span></button><button>⚙<span>Ajustes</span></button></nav><button class="manual-btn" onclick="openManual()" title="Manual">?</button></section>
+
+<section id="clan" class="screen"><div class="status"><span class="clock">3:49</span><span>▮▮▮ ᯤ 🔋</span></div><header class="head"><button class="back" onclick="show('home')">‹</button><div class="avatar sm">📎</div><div class="title"><h2>Clan CLIPER</h2><p>Comunidad Raider · 21 miembros</p></div><button class="circle">•••</button></header><div class="hero"><div><span>COBERTURA ACTIVA</span><h2>Rol: Kaito</h2></div><div class="stats"><div><strong id="heroTrust">18</strong><small>confianza</small></div><div><strong id="heroSusp">6</strong><small>sospecha</small></div></div></div><div class="section">Grupos del Clan</div><div class="group" onclick="openLobby()"><div class="avatar sm">🪪</div><div class="copy"><h3>Lobby</h3><p>Ficha de ingreso y preguntas de experiencia.</p></div><span>›</span></div><div class="group" onclick="openGeneral()"><div class="avatar sm">💬</div><div class="copy"><h3>Chat General</h3><p>Plática normal, plática, chismes y rumores.</p></div><span class="badge">3</span></div><div class="group" onclick="openCapture()"><div class="avatar sm">📷</div><div class="copy"><h3>Capturas de miembros</h3><p>Compara IDs ficticios sin acusar aliados.</p></div><span>›</span></div><div class="group" onclick="openOperations()"><div class="avatar sm">🕶️</div><div class="copy"><h3>Operaciones</h3><p id="opStatus">Gana 50 de confianza.</p></div><span id="opLock">🔒</span></div><div class="section">Campaña</div><div id="campaignProgress" class="progresscards"></div></section>
+
+<section id="chat" class="screen"><div class="status"><span class="clock">3:49</span><span>▮▮▮ ᯤ 🔋</span></div><header class="head"><button class="back" onclick="show('clan')">‹</button><div id="chatAvatar" class="avatar sm">💬</div><div class="title"><h2 id="chatTitle">Chat General</h2><p id="chatSub">21 miembros</p></div><button class="circle">•••</button></header><div id="hud" class="hud"><div><label>Confianza <b id="trustText">18</b></label><div class="bar"><i id="trustBar"></i></div></div><div><label>Sospecha <b id="suspText">6</b></label><div class="bar red"><i id="suspBar"></i></div></div><div><label>Estado</label><strong id="hudState" class="timer">OCULTO</strong></div></div><main id="messages" class="messages"><div class="date">HOY</div></main><div id="panel" class="panel"></div><form id="composer" class="composer"><button type="button">＋</button><input id="chatInput" placeholder="Mensaje"><button class="send">➤</button></form></section>
+
+<section id="capture" class="screen"><div class="status"><span class="clock">3:49</span><span>▮▮▮ ᯤ 🔋</span></div><header class="head"><button class="back" onclick="show('clan')">‹</button><div class="avatar sm">📷</div><div class="title"><h2>Captura de miembros</h2><p>IDs completamente ficticios</p></div></header><div class="hud"><div><label>Marcados</label><strong id="marked">0</strong></div><div><label>Aliados posibles</label><strong>2</strong></div><div><label>Precisión</label><strong id="accuracy">100%</strong></div></div><main class="messages" style="padding-bottom:30px"><div class="date">CAPTURA INICIAL</div><div class="panel" style="position:static;margin:0"><span class="panel-label">Marca únicamente los Raiders. Dos perfiles son Tiburones infiltrados que entraron después de ti.</span><div id="captureGrid" class="capture-grid"></div><button class="good" onclick="saveCapture()">Guardar expediente</button></div></main></section>
+
+<section id="team" class="screen"><div class="status"><span class="clock">3:49</span><span>▮▮▮ ᯤ 🔋</span></div><header class="head"><button class="back" onclick="show('chat')">‹</button><div id="teamAvatar" class="avatar sm">🧚</div><div class="title"><h2 id="teamName">Team</h2><p id="teamTheme">Temática</p></div><button class="circle">•••</button></header><div class="hud"><div><label>Raid en</label><strong id="teamTimer" class="timer">01:15</strong></div><div><label>Progreso</label><div class="bar"><i id="missionBar"></i></div></div><div><label>Estado</label><strong id="teamState">LOBBY</strong></div></div><main id="teamMessages" class="messages"><div class="date">LOBBY</div></main><div id="teamPanel" class="panel"></div></section>
+
+<section id="boss" class="screen"><div class="boss"><div class="bossicon">📎</div><div style="color:#ff8fa2;font-size:11px;font-weight:900;letter-spacing:2px">CIERRE FINAL</div><h1>CLIPER</h1><p>Protegiste tres Teams. Ahora verifica el expediente, protege infiltrados y cierra el Clan.</p><div class="meter"><div><span>Control de CLIPER</span><strong id="bossText">100%</strong></div><progress id="bossHp" max="100" value="100"></progress></div><div class="meter team"><div><span>Integridad del expediente</span><strong id="teamText">100%</strong></div><progress id="teamHp" max="100" value="100"></progress></div><div id="bossLog" class="bosslog"><div>CLIPER fija un único mensaje: 📎</div></div><div class="bossactions"><button onclick="bossAction('verify')">🔎 Verificar IDs</button><button onclick="bossAction('protect')">🛡️ Proteger aliados</button><button onclick="bossAction('close')">🦈 Cerrar canales</button><button onclick="bossAction('file')">📁 Completar expediente</button></div></div></section>
+
+<div id="toast" class="toast" style="display:none"></div><div id="modal" class="modal hidden"><div class="modalbox"><h2 id="modalTitle"></h2><p id="modalText"></p><button id="modalBtn">Continuar</button></div></div>
+</div>
+<script>
+const teams=[
+ {name:'Team Lululand',icon:'🧚',theme:'Only Asian · hadas y pociones',role:'Jungkook',origin:'BTS',extra1:'Hada de sombras',extra2:'Poción de sueño',signal:'📎',owner:'Owner Lululand'},
+ {name:'Vampire E Forze',icon:'🦇',theme:'Multifandom · vampiros y multirol',role:'Gojo Satoru',origin:'Jujutsu Kaisen',extra1:'Vampiro de sangre',extra2:'Transformación: murciélago',signal:'la luna está roja',owner:'Owner Forze'},
+ {name:'Nexus Multiverse',icon:'🌌',theme:'Multifandom libre · series, anime y cómics',role:'Ladybug',origin:'Miraculous',extra1:'Rol heroico',extra2:'Universo: París',signal:'🖇️',owner:'Owner Nexus'}
+];
+const memberData=[
+ {id:'ID-2041',role:'raider',note:'Admin del Clan'},
+ {id:'ID-7782',role:'ally',note:'Entró después; comportamiento discreto'},
+ {id:'ID-3410',role:'raider',note:'Comparte links con frecuencia'},
+ {id:'ID-9954',role:'raider',note:'Cuenta muy activa'},
+ {id:'ID-6628',role:'ally',note:'Nuevo, habla poco'},
+ {id:'ID-1187',role:'raider',note:'Owner secundario'}
+];
+const state={agent:localStorage.getItem('tx2-agent')||'',trust:+localStorage.getItem('tx2-trust')||18,susp:+localStorage.getItem('tx2-susp')||6,unlocked:localStorage.getItem('tx2-unlocked')==='true',captureDone:localStorage.getItem('tx2-capture')==='true',missions:+localStorage.getItem('tx2-missions')||0,selected:new Set(),timer:null,teamSeconds:75,stage:0,boss:100,integrity:100,shield:0,verified:false};
+const $=id=>document.getElementById(id);
+function persist(){localStorage.setItem('tx2-agent',state.agent);localStorage.setItem('tx2-trust',state.trust);localStorage.setItem('tx2-susp',state.susp);localStorage.setItem('tx2-unlocked',state.unlocked);localStorage.setItem('tx2-capture',state.captureDone);localStorage.setItem('tx2-missions',state.missions)}
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
+function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',1800)}
+function modal(h,p,b,fn){$('modalTitle').textContent=h;$('modalText').textContent=p;$('modalBtn').textContent=b;$('modal').classList.remove('hidden');$('modalBtn').onclick=()=>{$('modal').classList.add('hidden');if(fn)fn()}}
+function update(){state.trust=Math.max(0,Math.min(100,state.trust));state.susp=Math.max(0,Math.min(100,state.susp));if(state.trust>=50)state.unlocked=true;$('heroTrust').textContent=state.trust;$('heroSusp').textContent=state.susp;$('trustText').textContent=state.trust;$('suspText').textContent=state.susp;$('trustBar').style.width=state.trust+'%';$('suspBar').style.width=state.susp+'%';$('opStatus').textContent=state.unlocked?'Canal restringido desbloqueado.':'Gana 50 de confianza.';$('opLock').textContent=state.unlocked?'›':'🔒';renderCampaign();persist();if(state.susp>=100)modal('Cobertura perdida','CLIPER descubrió tu infiltración.','Reiniciar campaña',reset)}
+function renderCampaign(){const box=$('campaignProgress');box.innerHTML='';teams.forEach((t,i)=>{const d=document.createElement('div');d.className='progresscard '+(i<state.missions?'done':'');d.innerHTML=`<div><strong>${t.icon} ${t.name}</strong><small style="display:block;color:#888;margin-top:4px">${t.theme}</small></div><span>${i<state.missions?'✓':i===state.missions?'ACTUAL':'🔒'}</span>`;box.appendChild(d)})}
+function clock(){document.querySelectorAll('.clock').forEach(x=>x.textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}))}setInterval(clock,1000);clock();
+function login(){
+ const v=$('agent').value.trim();
+ if(!v){toast('Escribe un nombre');return}
+ state.agent=v;persist();
+ if(localStorage.getItem('tx2-tutorial')==='done'){show('home');toast('Bienvenido, '+v)}
+ else startTutorial()
+}
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();login()});$('loginBtn').addEventListener('click',e=>{e.preventDefault();login()});$('loginBtn').addEventListener('touchend',e=>{e.preventDefault();login()},{passive:false});$('agent').value=state.agent;
+function msg(box,name,text,type=''){const d=document.createElement('div');d.className='msg '+type;d.innerHTML=`<div class="name">${name}</div><p>${text}</p><time>${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</time>`;box.appendChild(d);setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'end'}),20)}
+
+const tutorialPages=[
+ {icon:'🦈',title:'Bienvenido a Tiburones.exe',text:'Eres parte de Tiburones.exe, un Clan Anti-Raider ficticio. Tu trabajo es infiltrarte en Clanes Raiders NPC sin ser descubierto.',example:'<strong>Tu objetivo general</strong><span>Ganar confianza, identificar Raiders, proteger Teams y cerrar la red de CLIPER.</span>'},
+ {icon:'📎',title:'¿Qué es un Clan Raider?',text:'Un Clan Raider es una comunidad donde los NPC hablan normal, usan roles falsos y esperan conseguir links de Teams para entrar coordinados.',example:'<strong>Dentro del Clan</strong><span>Lobby · Chat General · Operaciones · Avisos</span>'},
+ {icon:'🧚',title:'¿Qué es un Team?',text:'Los Teams son comunidades temáticas que se promocionan con edits. Al entrar, pasas por un Lobby, eliges personaje y completas una ficha.',example:'<strong>Ejemplos</strong><span>Only Asian · Anime · Multifandom · Vampiros · Minecraft · Fantasía</span>'},
+ {icon:'🪪',title:'Tu infiltración',text:'En el Lobby del Clan debes parecer nuevo, responder preguntas de experiencia y ganar confianza sin pedir links demasiado pronto.',example:'<strong>Cuida tus barras</strong><span>Confianza alta desbloquea Operaciones. Sospecha alta termina la misión.</span>'},
+ {icon:'📷',title:'Capturas e IDs ficticios',text:'Compararás IDs inventados del juego. Algunos miembros nuevos son Raiders, pero otros son Tiburones infiltrados como tú.',example:'<strong>Importante</strong><span>No marques aliados por error. Un falso positivo daña el expediente.</span>'},
+ {icon:'⚠️',title:'Cuando empiece el raid',text:'Entra al Team, completa la ficha, detecta la señal acordada y avisa al owner antes de que termine el contador.',example:'<strong>Campaña</strong><span>Protege tres Teams distintos y después enfrenta a CLIPER.</span>'}
+];
+let tutorialIndex=0;
+function startTutorial(){tutorialIndex=0;show('tutorial');renderTutorial()}
+function renderTutorial(){
+ const p=tutorialPages[tutorialIndex];
+ $('tutorialIcon').textContent=p.icon;
+ $('tutorialStep').textContent='PASO '+(tutorialIndex+1)+' DE '+tutorialPages.length;
+ $('tutorialTitle').textContent=p.title;
+ $('tutorialText').textContent=p.text;
+ $('tutorialExample').innerHTML=p.example;
+ $('tutorialBack').disabled=tutorialIndex===0;
+ $('tutorialBack').style.opacity=tutorialIndex===0?'.4':'1';
+ $('tutorialNext').textContent=tutorialIndex===tutorialPages.length-1?'Empezar campaña':'Siguiente';
+}
+$('tutorialBack').onclick=()=>{if(tutorialIndex>0){tutorialIndex--;renderTutorial()}};
+$('tutorialNext').onclick=()=>{
+ if(tutorialIndex<tutorialPages.length-1){tutorialIndex++;renderTutorial()}
+ else{localStorage.setItem('tx2-tutorial','done');show('home');toast('Manual completado')}
+};
+function openManual(){
+ const old=tutorialIndex;
+ tutorialIndex=0;
+ show('tutorial');
+ renderTutorial();
+ $('tutorialNext').textContent='Cerrar manual';
+ $('tutorialNext').onclick=()=>{
+   if(tutorialIndex<tutorialPages.length-1){tutorialIndex++;renderTutorial()}
+   else{show('home');tutorialIndex=old}
+ };
+}
+
+function openClan(){update();show('clan')}
+function setupChat(title,sub,icon){show('chat');$('chatTitle').textContent=title;$('chatSub').textContent=sub;$('chatAvatar').textContent=icon;$('messages').innerHTML='<div class="date">HOY</div>';$('panel').innerHTML='';$('composer').style.display='grid'}
+function choices(label,items){const p=$('panel');p.innerHTML='<span class="panel-label">'+label+'</span>';items.forEach(([t,f])=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{p.innerHTML='';f()};p.appendChild(b)})}
+
+function openLobby(){
+ setupChat('Lobby','Fichas y nuevos reclutas','🪪');
+ $('composer').style.display='none';
+ msg($('messages'),'Mika','holaa, pasa ficha y espera a que te acepten.');
+ setTimeout(()=>msg($('messages'),'Mika','¿has estado antes en algún Clan o quieres que te enseñemos?'),260);
+ setTimeout(()=>msg($('messages'),'Static','Y DI QUÉ ROL VAS A USAR.','bad'),520);
+ setTimeout(()=>choices('Primera impresión en el Clan.',[
+  ['Decir que eres nuevo y pedir que te expliquen',()=>{
+    state.trust+=14;state.susp-=2;
+    msg($('messages'),state.agent,'Es mi primer Clan, si me explican cómo se manejan, mejor.','me');
+    setTimeout(()=>msg($('messages'),'Mika','va, no pasa nada, aquí te vamos diciendo.'),300);
+    setTimeout(lobbyRoundTwo,650);update()
+  }],
+  ['Decir que ya conoces varios Clanes',()=>{
+    state.trust+=4;state.susp+=17;
+    msg($('messages'),state.agent,'Ya he estado en otros Clanes, más o menos sé cómo va.','me');
+    setTimeout(()=>msg($('messages'),'Static','¿EN CUÁLES?','bad'),300);
+    setTimeout(lobbyRoundTwo,650);update()
+  }],
+  ['Responder solo con tu rol',()=>{
+    state.trust+=7;state.susp+=6;
+    msg($('messages'),state.agent,'Voy a usar a Kaito.','me');
+    setTimeout(()=>msg($('messages'),'Eclipse','no respondió lo demás, pero bueno.'),300);
+    setTimeout(lobbyRoundTwo,650);update()
+  }]
+ ]),800)
+}
+function lobbyRoundTwo(){
+ msg($('messages'),'Byte','¿y sí aguantas cuando se pone pesado el chat?');
+ setTimeout(()=>choices('La gente del Clan mide cómo reaccionas.',[
+  ['Responder con calma',()=>{
+    state.trust+=12;state.susp-=1;
+    msg($('messages'),state.agent,'sí, mientras me digan qué hacer, todo bien.','me');
+    setTimeout(()=>msg($('messages'),'Byte','entonces sí te adaptas rápido.'),280);
+    update()
+  }],
+  ['Presumir que no te asusta nada',()=>{
+    state.trust+=6;state.susp+=9;
+    msg($('messages'),state.agent,'a mí nada me espanta, ya he visto de todo.','me');
+    setTimeout(()=>msg($('messages'),'Static','HABLAS COMO SI YA SUPIERAS MUCHO.','bad'),280);
+    update()
+  }],
+  ['Cambiar el tema preguntando por los demás',()=>{
+    state.trust+=9;state.susp+=3;
+    msg($('messages'),state.agent,'¿ustedes cuánto llevan aquí?','me');
+    setTimeout(()=>msg($('messages'),'Mika','algunos meses, otros acaban de entrar.'),280);
+    update()
+  }]
+ ]),450)
+}
+const generalScenes=[
+ {
+  lines:[['Byte','¿vieron el edit que subieron anoche?',''],['Mika','sí, aunque el audio ya está medio quemado',''],['Static','EL NUEVO NI OPINA','bad']],
+  prompt:'Métete en la conversación sin verte desesperado.',
+  options:[
+   ['Decir que el edit quedó bien',15,-2,'la transición del final quedó bien.','Byte','sí, esa parte fue la mejor.'],
+   ['Decir que no lo has visto todavía',9,1,'todavía no lo veo, luego lo busco.','Eclipse','normal, lo subieron tarde.'],
+   ['Preguntar inmediatamente de qué Team es',3,15,'¿de qué Team era?','Static','¿Y PARA QUÉ QUIERES SABER?']
+  ]
+ },
+ {
+  lines:[['Mika','me quedé dormida y desperté con como 200 mensajes',''],['Byte','siempre pasa cuando empiezan a discutir',''],['Eclipse','anoche sacaron a uno por andar pasando capturas','']],
+  prompt:'La conversación cambia. Elige cómo reaccionar.',
+  options:[
+   ['Reírte de la cantidad de mensajes',13,0,'JAJA 200 mensajes por una discusión es demasiado.','Byte','y eso que borraron varios.'],
+   ['Preguntar quién pasó capturas',2,18,'¿quién fue el que pasó capturas?','Eclipse','no preguntes tanto si acabas de entrar.'],
+   ['Decir que apenas estás entendiendo el chat',11,-1,'yo apenas voy entendiendo quién es quién aquí.','Mika','tranqui, en unos días te ubicas.']
+  ]
+ },
+ {
+  lines:[['Byte','¿quién va a estar conectado más tarde?',''],['Mika','yo quizá, depende la hora',''],['Static','CLIPER DIJO QUE ESTUVIÉRAMOS PENDIENTES','bad']],
+  prompt:'Parece que habrá movimiento, pero todavía no han pasado link.',
+  options:[
+   ['Decir que estarás conectado un rato',16,1,'yo sí voy a estar un rato, avisen.','Byte','va, entonces no te vayas.'],
+   ['Pedir el link de una vez',1,22,'¿ya tienen el link o qué?','Static','BAJALE A LA PRISA.'],
+   ['Preguntar solo a qué hora',10,3,'¿más o menos a qué hora?','Mika','todavía no dicen, solo que estemos pendientes.']
+  ]
+ }
+];
+function openGeneral(){
+ setupChat('Chat General','21 miembros','💬');
+ state.generalScene=state.generalScene||0;
+ playGeneralScene()
+}
+function playGeneralScene(){
+ const scene=generalScenes[state.generalScene%generalScenes.length];
+ $('messages').innerHTML='<div class="date">HOY</div>';
+ $('panel').innerHTML='';
+ scene.lines.forEach((x,i)=>setTimeout(()=>msg($('messages'),...x),i*250));
+ setTimeout(()=>choices(scene.prompt,scene.options.map(o=>[
+  o[0],()=>{
+   state.trust+=o[1];state.susp+=o[2];
+   msg($('messages'),state.agent,o[3],'me');
+   setTimeout(()=>msg($('messages'),o[4],o[5],o[4]==='Static'?'bad':''),280);
+   state.generalScene++;
+   update();
+   setTimeout(()=>choices('¿Qué haces ahora?',[
+    ['Seguir conversando',playGeneralScene],
+    [state.unlocked?'Ir a Operaciones':'Volver al Clan',()=>state.unlocked?openOperations():show('clan')],
+    ['Revisar capturas de miembros',openCapture]
+   ]),620)
+  }
+ ])),scene.lines.length*250+250)
+}
+
+$('composer').onsubmit=e=>{e.preventDefault();const t=$('chatInput').value.trim();if(!t)return;msg($('messages'),state.agent,t,'me');$('chatInput').value='';state.susp+=Math.ceil(t.length/22);update()}
+function openCapture(){show('capture');state.selected=new Set();$('captureGrid').innerHTML='';memberData.forEach((m,i)=>{const b=document.createElement('button');b.className='idcard';b.innerHTML=`<strong>${m.id}</strong><small>${m.note}</small>`;b.onclick=()=>{if(state.selected.has(i)){state.selected.delete(i);b.classList.remove('sel','badsel')}else{state.selected.add(i);b.classList.add(m.role==='ally'?'badsel':'sel')}$('marked').textContent=state.selected.size};$('captureGrid').appendChild(b)});$('marked').textContent=0;$('accuracy').textContent='100%'}
+function saveCapture(){let raiders=0,allies=0;state.selected.forEach(i=>memberData[i].role==='raider'?raiders++:allies++);$('accuracy').textContent=Math.max(0,100-allies*40)+'%';if(allies)modal('Falso positivo','Marcaste un Tiburón infiltrado como Raider.','Reintentar',openCapture);else if(raiders<4)modal('Faltan perfiles','Todavía no identificaste los cuatro Raiders.','Reintentar',openCapture);else{state.captureDone=true;toast('Expediente inicial guardado');persist();modal('Captura verificada','Separaste correctamente aliados y Raiders.','Volver al Clan',()=>show('clan'))}}
+function openOperations(){if(!state.unlocked)return toast('Necesitas 50 de confianza');if(!state.captureDone)return modal('Falta la captura inicial','Antes de seguir, identifica los IDs del Clan.','Abrir capturas',openCapture);if(state.missions>=teams.length)return startBoss();setupChat('Operaciones','Canal restringido','🕶️');$('composer').style.display='none';const t=teams[state.missions];msg($('messages'),'Mika','conseguí link de '+t.name);setTimeout(()=>msg($('messages'),'Byte',t.theme),280);setTimeout(()=>msg($('messages'),'CLIPER','Esperen.','bad'),540);setTimeout(()=>choices('Prepárate antes de la señal.',[['Entrar al Team',()=>startTeam()],['Revisar otra vez la captura',openCapture]]),760)}
+function startTeam(){const t=teams[state.missions];show('team');$('teamName').textContent=t.name;$('teamTheme').textContent=t.theme;$('teamAvatar').textContent=t.icon;$('teamMessages').innerHTML='<div class="date">LOBBY</div>';state.teamSeconds=75;state.stage=0;$('missionBar').style.width='0%';$('teamState').textContent='LOBBY';msg($('teamMessages'),'Admin del Lobby','holaa, ¿qué rol buscas?');setTimeout(()=>msg($('teamMessages'),'CuentaNueva_17',state.missions===0?'jungkook':state.missions===1?'gojo':'ladybug','bad'),250);renderFicha(t);clearInterval(state.timer);state.timer=setInterval(()=>{state.teamSeconds--;$('teamTimer').textContent='01:'+String(state.teamSeconds-60).padStart(2,'0');if(state.teamSeconds<60)$('teamTimer').textContent='00:'+String(state.teamSeconds).padStart(2,'0');if(state.teamSeconds<=0){clearInterval(state.timer);modal('Raid ejecutado','No alcanzaste a avisar al owner.','Reiniciar misión',()=>startTeam())}},1000)}
+
+function renderFicha(t){
+ const fields=[
+  {label:'Personaje',answer:t.role},
+  {label:'Origen',answer:t.origin},
+  {label:'Dato temático 1',answer:t.extra1},
+  {label:'Dato temático 2',answer:t.extra2}
+ ];
+ const wrong=['Naruto','No sé','Sin completar','Cualquier cosa'];
+ const all=[...fields.map(f=>f.answer),...wrong].sort(()=>Math.random()-.5);
+ const selected=[null,null,null,null];
+
+ $('teamPanel').innerHTML=`
+  <span class="panel-label">Llena la ficha tocando primero un espacio y luego una opción. No necesitas arrastrar en celular.</span>
+  <div id="fichaSlots" class="ficha-slots"></div>
+  <div class="section" style="padding:9px 0 7px;font-size:13px">Opciones</div>
+  <div id="fichaOptions" class="option-grid"></div>
+  <button id="clearFicha">Limpiar ficha</button>
+  <button id="sendFicha" class="good">Enviar ficha</button>`;
+
+ let activeSlot=0;
+ function drawSlots(){
+  const box=$('fichaSlots');box.innerHTML='';
+  fields.forEach((f,i)=>{
+   const b=document.createElement('button');
+   b.className='ficha-slot';
+   b.style.width='100%';b.style.color='white';b.style.textAlign='left';
+   b.style.borderColor=i===activeSlot?'var(--green)':'#343438';
+   b.innerHTML=`<span>${f.label}</span><strong>${selected[i]||'Toca para elegir'}</strong>`;
+   b.onclick=()=>{activeSlot=i;drawSlots()};
+   box.appendChild(b)
+  })
+ }
+ function drawOptions(){
+  const box=$('fichaOptions');box.innerHTML='';
+  all.forEach(value=>{
+   const b=document.createElement('button');
+   b.textContent=value;
+   b.className=selected.includes(value)?'used':'';
+   b.onclick=()=>{
+    const old=selected[activeSlot];
+    selected[activeSlot]=value;
+    activeSlot=Math.min(3,activeSlot+1);
+    drawSlots();drawOptions()
+   };
+   box.appendChild(b)
+  })
+ }
+ drawSlots();drawOptions();
+ $('clearFicha').onclick=()=>{selected.fill(null);activeSlot=0;drawSlots();drawOptions()};
+ $('sendFicha').onclick=()=>{
+  const ok=fields.every((f,i)=>selected[i]===f.answer);
+  if(!ok){
+   state.teamSeconds=Math.max(1,state.teamSeconds-8);
+   toast('Revisa la ficha: -8 segundos');
+  }else{
+   msg($('teamMessages'),state.agent,'Ficha enviada correctamente.','me');
+   $('missionBar').style.width='33%';
+   $('teamState').textContent='DENTRO';
+   $('teamPanel').innerHTML='<span class="panel-label">Ficha aceptada. Espera a que te agreguen al Chat General.</span>';
+   setTimeout(()=>msg($('teamMessages'),'Admin del Lobby','todo bien, te agrego al General'),300);
+   setTimeout(()=>signalPhase(t),900)
+  }
+ }
+}
+
+function signalPhase(t){$('teamMessages').innerHTML='<div class="date">CHAT GENERAL</div>';msg($('teamMessages'),'Miembro del Team','holaa, bienvenidos');setTimeout(()=>msg($('teamMessages'),'CuentaNueva_17','gracias','bad'),250);setTimeout(()=>msg($('teamMessages'),'CLIPER',t.signal,'bad'),650);setTimeout(()=>{$('teamPanel').classList.add('signal');$('teamPanel').innerHTML=`<span class="panel-label">SEÑAL DETECTADA · ${t.signal}</span><button onclick="compareEntries()">Comparar quienes entraron juntos</button><button onclick="warnOwner()">Avisar a ${t.owner}</button>`},850)}
+function compareEntries(){toast('Detectaste tres fichas rápidas y coordinadas');$('missionBar').style.width='66%'}
+function warnOwner(){const t=teams[state.missions];msg($('teamMessages'),state.agent,t.owner+', esas cuentas vienen del Clan CLIPER. Tengo capturas.','me');setTimeout(()=>msg($('teamMessages'),t.owner,'cierro invitación, activo aprobación y limito nuevos'),300);clearInterval(state.timer);$('missionBar').style.width='100%';$('teamState').textContent='PROTEGIDO';$('teamPanel').classList.remove('signal');$('teamPanel').innerHTML=`<span class="panel-label">TEAM PROTEGIDO</span><p style="color:#aaa">Completaste esta infiltración. Regresa al Clan para buscar el siguiente Team.</p><button class="good" onclick="finishMission()">Cerrar misión</button>`}
+function finishMission(){state.missions++;persist();update();if(state.missions<teams.length){modal('Misión completada',`Protegiste ${teams[state.missions-1].name}. CLIPER buscará otro Team.`,`Volver al Clan`,()=>show('clan'))}else modal('Campaña completa','Los tres Teams están protegidos. Ya puedes iniciar el cierre del Clan.','Enfrentar a CLIPER',startBoss)}
+function startBoss(){show('boss');state.boss=100;state.integrity=100;state.shield=0;state.verified=false;updateBoss();$('bossLog').innerHTML='<div>CLIPER fija un único mensaje: 📎</div>'}
+function log(t){const d=document.createElement('div');d.textContent='› '+t;$('bossLog').prepend(d)}
+function updateBoss(){$('bossHp').value=state.boss;$('teamHp').value=state.integrity;$('bossText').textContent=state.boss+'%';$('teamText').textContent=state.integrity+'%'}
+function bossAction(a){let dmg=0,msg='';if(a==='verify'){dmg=10;state.verified=true;state.shield+=10;msg='Verificas IDs y eliminas falsos positivos.'}if(a==='protect'){dmg=5;state.shield+=26;msg='Proteges a los Tiburones infiltrados.'}if(a==='close'){dmg=state.verified?28:12;state.shield=Math.max(0,state.shield-5);msg='Cierras canales internos del Clan.'}if(a==='file'){dmg=state.captureDone&&state.missions===3?39:8;msg=dmg>10?'El expediente completo rompe el control de CLIPER.':'El expediente aún tiene huecos.'}state.boss=Math.max(0,state.boss-dmg);const hit=Math.max(4,18-Math.floor(state.shield/3));state.integrity=Math.max(0,state.integrity-hit);state.shield=Math.max(0,state.shield-7);log(msg);log('CLIPER intenta mezclar Raiders y aliados: -'+hit);updateBoss();if(state.boss<=0)modal('🦈 Clan cerrado','Tiburones.exe protegió los tres Teams y cerró la red ficticia de CLIPER.','Volver al inicio',()=>show('home'));else if(state.integrity<=0)modal('Expediente corrompido','CLIPER logró provocar demasiados falsos positivos.','Reintentar',startBoss)}
+function reset(){clearInterval(state.timer);Object.assign(state,{trust:18,susp:6,unlocked:false,captureDone:false,missions:0,selected:new Set()});persist();update();show('home')}
+update();
+</script></body></html>
